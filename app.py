@@ -53,21 +53,23 @@ from tweepy.streaming import StreamListener
 from tweepy import Stream
 import tweepy 
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 
 cred = {
-            "access_key": "", 
-            "access_secret": "", 
-            "consumer_key": "", 
-            "consumer_secret": ""
+            "consumer_key": "16WBwWcptXYrmPbldrCBJHoQx", 
+            "consumer_secret": "JTyA7F2qjqOhOwzQZCXKYgXRYChMZuoEk0q8Xdh5dc7vsiOATS", 
+            "access_key": "1422522454627524608-SogUabVDL6TIeZ2oZG8OJnYCxnQwU1", 
+            "access_secret": "y0zFYav5YWcAJ6jorjOr4LjaWqmQKeR8Ke0eXqx4jKh7W"
         }
 auth = tweepy.OAuthHandler(cred['consumer_key'], cred['consumer_secret'])
 auth.set_access_token(cred['access_key'], cred['access_secret'])
 
-
+socketio = SocketIO(app)
+socketio.init_app(app, cors_allowed_origins="*")
 
 def do_whatever_processing_you_want(text): 
     return ('%s' % (text)).encode('utf-8')
@@ -83,12 +85,12 @@ class StdOutListener(StreamListener):
             socketio.emit('stream_channel',
                   {'data': text, 'time': tweet[u'timestamp_ms']},
                   namespace='/demo_streaming')
-            print text
+            print (text)
         except: 
             pass 
 
     def on_error(self, status):
-        print 'Error status code', status
+        print ('Error status code'), status
         exit()
 
 
